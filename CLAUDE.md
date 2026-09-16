@@ -13,6 +13,10 @@ The proxy may be run locally or deployed as a container.
 ## Technology Stack
 
 - Python 3 version 3.12 or higher
+- FastAPI + uvicorn
+- requests library for making HTTP requests
+
+> Note: This project should use any available package that will make the code base shorter and is easier to maintain. That means the rule saying "no external dependencies" is not applicable here. Use any package that will make the code base shorter and easier to maintain.
 
 ## Python Virtual Environment
 
