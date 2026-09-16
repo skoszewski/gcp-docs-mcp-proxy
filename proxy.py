@@ -7,6 +7,7 @@ forwarded request so that clients do not need their own Google credentials.
 import os
 
 import google.auth
+import google.auth.exceptions
 import google.auth.transport.requests
 import requests
 from fastapi import FastAPI, Request
@@ -51,7 +52,7 @@ async def auth_diagnostics():
     error = None
     try:
         await run_in_threadpool(get_access_token)
-    except Exception as exc:
+    except google.auth.exceptions.GoogleAuthError as exc:
         error = str(exc)
 
     return {
