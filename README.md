@@ -20,6 +20,12 @@ Authenticate with Google Application Default Credentials, for example:
 gcloud auth application-default login
 ```
 
+The Developer Knowledge API must be enabled on the target project:
+
+```bash
+gcloud services enable developerknowledge.googleapis.com --project PROJECT_ID
+```
+
 ## Configuration
 
 The proxy is configured using environment variables:
