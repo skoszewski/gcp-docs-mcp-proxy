@@ -15,5 +15,3 @@ The proxy may be run locally or deployed as a container.
 - Go, standard library `net/http/httputil` reverse proxy
 - `cloud.google.com/go/auth` for Google Application Default Credentials (ADC)
 - Container image based on `gcr.io/distroless/static-debian13`
-
-> Note: This project should use any available package that will make the code base shorter and is easier to maintain. That means the rule saying "no external dependencies" is not applicable here. Use any package that will make the code base shorter and easier to maintain.
