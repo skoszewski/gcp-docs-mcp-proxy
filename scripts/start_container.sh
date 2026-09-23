@@ -45,26 +45,26 @@ fi
 case "$RUNNER" in
     docker)
         if [ -n "$KEY_FILE" ]; then
-            docker run --name "$NAME" -d -p "${PORT}:8989" \
+            docker run --rm --name "$NAME" -d -p "${PORT}:8989" \
                 -e GOOGLE_APPLICATION_CREDENTIALS=/app/key.json \
                 -v "$(realpath "$KEY_FILE"):/app/key.json" \
                 "$IMAGE"
         else
             GCLOUD_CONFIG_DIR="${CLOUDSDK_CONFIG:-${HOME}/.config/gcloud}"
-            docker run --name "$NAME" -d -p "${PORT}:8989" \
+            docker run --rm --name "$NAME" -d -p "${PORT}:8989" \
                 -v "${GCLOUD_CONFIG_DIR}:/root/.config/gcloud:ro" \
                 "$IMAGE"
         fi
         ;;
     container)
         if [ -n "$KEY_FILE" ]; then
-            container run --name "$NAME" -d -p "${PORT}:8989" \
+            container run --rm --name "$NAME" -d -p "${PORT}:8989" \
                 -e GOOGLE_APPLICATION_CREDENTIALS=/app/key.json \
                 -v "$(realpath "$KEY_FILE"):/app/key.json" \
                 "$IMAGE"
         else
             GCLOUD_CONFIG_DIR="${CLOUDSDK_CONFIG:-${HOME}/.config/gcloud}"
-            container run --name "$NAME" -d -p "${PORT}:8989" \
+            container run --rm --name "$NAME" -d -p "${PORT}:8989" \
                 -v "${GCLOUD_CONFIG_DIR}:/root/.config/gcloud:ro" \
                 "$IMAGE"
         fi
