@@ -22,6 +22,20 @@ The Developer Knowledge API must be enabled on the target project:
 gcloud services enable developerknowledge.googleapis.com --project PROJECT_ID
 ```
 
+When the proxy runs using ADC authentication, it calls the MCP server as the logged-in user, so that user needs the MCP Tool User role (`roles/mcp.toolUser`, permission `mcp.tools.call`) on the target project:
+
+```bash
+gcloud projects add-iam-policy-binding PROJECT_ID \
+    --member="user:USER_EMAIL" --role="roles/mcp.toolUser"
+```
+
+When the proxy runs with a service account key (`--key-file` in `scripts/start.sh` and `scripts/start_container.sh`), it calls the MCP server as the service account, so the service account needs the same role:
+
+```bash
+gcloud projects add-iam-policy-binding PROJECT_ID \
+    --member="serviceAccount:SA_EMAIL" --role="roles/mcp.toolUser"
+```
+
 ## Configuration
 
 The proxy is configured using environment variables:
