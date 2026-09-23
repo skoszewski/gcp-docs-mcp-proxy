@@ -27,17 +27,9 @@ while [ $# -gt 0 ]; do
 done
 
 cd "$(dirname "$0")/.."
-. .venv/bin/activate
-
 if [ -n "$KEY_FILE" ]; then
     GOOGLE_APPLICATION_CREDENTIALS="$KEY_FILE"
     export GOOGLE_APPLICATION_CREDENTIALS
 fi
 
-if [ -n "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
-    jq -r '"Auth: service account key (\(.client_email))"' "$GOOGLE_APPLICATION_CREDENTIALS"
-else
-    echo "Auth: ADC"
-fi
-
-exec uvicorn proxy:app --host "$HOST" --port "$PORT"
+PROXY_HOST="$HOST" PROXY_PORT="$PORT" exec go run .

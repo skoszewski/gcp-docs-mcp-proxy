@@ -5,6 +5,8 @@ IMAGE="gcp-docs-mcp-proxy"
 NAME="gcp-docs-mcp-proxy"
 PORT="8989"
 KEY_FILE=""
+CPUS="2"
+MEMORY="256m"
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -18,6 +20,14 @@ while [ $# -gt 0 ]; do
             ;;
         --port)
             PORT="$2"
+            shift 2
+            ;;
+        --cpus)
+            CPUS="$2"
+            shift 2
+            ;;
+        --memory)
+            MEMORY="$2"
             shift 2
             ;;
         --key-file)
@@ -45,26 +55,26 @@ fi
 case "$RUNNER" in
     docker)
         if [ -n "$KEY_FILE" ]; then
-            docker run --rm --name "$NAME" -d -p "${PORT}:8989" \
+            docker run --rm --name "$NAME" --cpus "$CPUS" --memory "$MEMORY" -d -p "${PORT}:8989" \
                 -e GOOGLE_APPLICATION_CREDENTIALS=/app/key.json \
                 -v "$(realpath "$KEY_FILE"):/app/key.json" \
                 "$IMAGE"
         else
             GCLOUD_CONFIG_DIR="${CLOUDSDK_CONFIG:-${HOME}/.config/gcloud}"
-            docker run --rm --name "$NAME" -d -p "${PORT}:8989" \
+            docker run --rm --name "$NAME" --cpus "$CPUS" --memory "$MEMORY" -d -p "${PORT}:8989" \
                 -v "${GCLOUD_CONFIG_DIR}:/root/.config/gcloud:ro" \
                 "$IMAGE"
         fi
         ;;
     container)
         if [ -n "$KEY_FILE" ]; then
-            container run --rm --name "$NAME" -d -p "${PORT}:8989" \
+            container run --rm --name "$NAME" --cpus "$CPUS" --memory "$MEMORY" -d -p "${PORT}:8989" \
                 -e GOOGLE_APPLICATION_CREDENTIALS=/app/key.json \
                 -v "$(realpath "$KEY_FILE"):/app/key.json" \
                 "$IMAGE"
         else
             GCLOUD_CONFIG_DIR="${CLOUDSDK_CONFIG:-${HOME}/.config/gcloud}"
-            container run --rm --name "$NAME" -d -p "${PORT}:8989" \
+            container run --rm --name "$NAME" --cpus "$CPUS" --memory "$MEMORY" -d -p "${PORT}:8989" \
                 -v "${GCLOUD_CONFIG_DIR}:/root/.config/gcloud:ro" \
                 "$IMAGE"
         fi

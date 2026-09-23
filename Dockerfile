@@ -1,18 +1,17 @@
-FROM python:3.12-slim
+FROM golang:1.27 AS build
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends tini jq \
-    && rm -rf /var/lib/apt/lists/*
+WORKDIR /src
 
-WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY main.go .
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /proxy .
 
-COPY proxy.py .
-COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
+FROM gcr.io/distroless/static-debian13
+
+COPY --from=build /proxy /proxy
 
 EXPOSE 8989
 
-ENTRYPOINT ["tini", "--", "./entrypoint.sh"]
+ENTRYPOINT ["/proxy"]

@@ -8,11 +8,7 @@ It is available using MIT license, so feel free to use it in your own projects.
 
 ## Setup
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
+Go is required to build and run the proxy locally.
 
 Authenticate with Google Application Default Credentials, for example:
 
@@ -32,13 +28,13 @@ The proxy is configured using environment variables:
 
 - `MCP_TARGET_URL`: MCP server endpoint to forward requests to. Defaults to `https://developerknowledge.googleapis.com/mcp`.
 
-The listen address and port are controlled by uvicorn's command-line flags.
+- `PROXY_HOST`: listen address. Defaults to `0.0.0.0`.
+- `PROXY_PORT`: listen port. Defaults to `8989`.
 
 ## Running locally
 
 ```bash
-source .venv/bin/activate
-uvicorn proxy:app --host 0.0.0.0 --port 8989
+go run .
 ```
 
 Point your MCP client at `http://localhost:8989/`.
@@ -53,3 +49,5 @@ Point your MCP client at `http://localhost:8989/`.
 docker build -t gcp-docs-mcp-proxy .
 docker run -p 8989:8989 -v "$HOME/.config/gcloud:/root/.config/gcloud:ro" gcp-docs-mcp-proxy
 ```
+
+The image is built on `gcr.io/distroless/static-debian13`.
